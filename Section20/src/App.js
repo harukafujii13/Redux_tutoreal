@@ -29,7 +29,7 @@ const router = createBrowserRouter([
     element: <Rootlayout />,
     errorElement: <ErrorPage />,
     children: [
-      { path: "", element: <HomePage /> },
+      { index: true, element: <HomePage /> },  //path: ""
       { path: "products", element: <ProductsPage />, errorElement: <ProductsPage /> },
       {path: 'products/:productId', element: <ProductdetailPage/>}
     ],
@@ -54,3 +54,7 @@ export default App;
 
 //relative pass
 //自分がいるディレクトリを起点にしてパスを書く
+
+//memo2
+//index route
+//that should be loaded if the parent routes path is active  
