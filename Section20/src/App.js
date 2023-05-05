@@ -45,3 +45,12 @@ function App() {
 export default App;
 
 //npm install react-router-dom
+
+
+
+//memo1
+//absolute pass
+//他のファイルを import してくる際に、指定されたデレクトリを起点にしてパスを書く
+
+//relative pass
+//自分がいるディレクトリを起点にしてパスを書く
