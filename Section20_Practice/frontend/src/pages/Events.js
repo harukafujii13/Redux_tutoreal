@@ -1,18 +1,21 @@
-import { json, useLoaderData } from "react-router-dom";
+import { Suspense } from "react";
+import { Await, defer, json, useLoaderData } from "react-router-dom";
 import EventsList from "../components/EventsList";
 
 function EventsPage() {
-  const data = useLoaderData();
-  // if (data.isError) {
-  //   return <p>{data.message}</p>;
-  // }
-  const events = data.events;
-  return <EventsList events={events} />;
+  const { events } = useLoaderData();
+  return (
+    <Suspense fallback={<p style={{ textAlign: "center" }}>Loading...</p>}>
+      <Await resolve={events}>
+        {(loadedEvents) => <EventsList events={loadedEvents} />}
+      </Await>
+    </Suspense>
+  );
 }
 
 export default EventsPage;
 
-export async function loader() {
+async function loadEvents() {
   const response = await fetch("http://localhost:8080/events");
 
   if (!response.ok) {
@@ -27,8 +30,15 @@ export async function loader() {
       }
     );
   } else {
-    return response;
+    const resData = await response.json();
+    return resData.events;
   }
+}
+
+export function loader() {
+  return defer({
+    events: loadEvents(),
+  });
 }
 
 //memo1
@@ -49,3 +59,10 @@ export async function loader() {
 //memo3
 //In the code above, throw new Response(...) creates and throws a new Response object
 //with a JSON-encoded message as the first argument and a status code of 500 as the second argument.
+
+//memo4
+//When the EventsPage component is rendered, it first displays a loading message (using Suspense and Await).
+//Once the events are loaded, the EventsList component is rendered with the loaded events.
+
+//memo5
+//<Suspense> lets you display a fallback until its children have finished loading.
